@@ -1,8 +1,0 @@
-C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication4\bin\Debug\ConsoleApplication4.exe.config
-C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication4\bin\Debug\ConsoleApplication4.exe
-C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication4\bin\Debug\ConsoleApplication4.pdb
-C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication4\bin\Debug\LiteDB.dll
-C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication4\bin\Debug\LiteDB.xml
-C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication4\obj\Debug\ConsoleApplication4.csprojResolveAssemblyReference.cache
-C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication4\obj\Debug\ConsoleApplication4.exe
-C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication4\obj\Debug\ConsoleApplication4.pdb
