@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Kontur.GameStats.Server.Classes;
 using LiteDB;
 using System.ServiceModel.Web;
+using Serilog;
 
 namespace Kontur.GameStats.Server.Service
 {
@@ -24,21 +25,37 @@ namespace Kontur.GameStats.Server.Service
 
         public void AddMatchInfo(Match match, string endpoint, string timestamp)
         {
-            using (var database = new LiteDatabase(Program.databasePath))
+            try
             {
-                var matchesCollection = database.GetCollection<Match>("matches");
-                var serversCollection = database.GetCollection<Classes.Server>("servers");
-                Match.AddMatchInfo(matchesCollection, serversCollection, match, endpoint, timestamp);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var matchesCollection = database.GetCollection<Match>("matches");
+                    var serversCollection = database.GetCollection<Classes.Server>("servers");
+                    Match.AddMatchInfo(matchesCollection, serversCollection, match, endpoint, timestamp);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP PUT AddMatchInfo");
+                throw exc;
             }
         }
 
         public void AddServerInfo(Classes.Server server, string endpoint)
         {
-            using (var database = new LiteDatabase(Program.databasePath))
+            try
             {
-                var serversCollection = database.GetCollection<Classes.Server>("servers");
-                serversCollection.EnsureIndex(x => x.Endpoint);
-                Classes.Server.AddServerInfo(serversCollection, server, endpoint);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var serversCollection = database.GetCollection<Classes.Server>("servers");
+                    serversCollection.EnsureIndex(x => x.Endpoint);
+                    Classes.Server.AddServerInfo(serversCollection, server, endpoint);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP PUT AddServerInfo");
+                throw exc;
             }
         }
 
@@ -54,32 +71,56 @@ namespace Kontur.GameStats.Server.Service
                 if (exc.Message == "Count is less or equal zero")
                     return new List<PlayerReport>();
             }
-            using (var database = new LiteDatabase(Program.databasePath))
+            try
             {
-                var matchesCollection = database.GetCollection<Match>("matches");
-                matchesCollection.EnsureIndex(x => x.Scoreboard.Select(y => y.Name));
-                return PlayerReport.GetBestPlayers(matchesCollection, quantity);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var matchesCollection = database.GetCollection<Match>("matches");
+                    matchesCollection.EnsureIndex(x => x.Scoreboard.Select(y => y.Name));
+                    return PlayerReport.GetBestPlayers(matchesCollection, quantity);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP GET GetBestPlayers");
+                throw exc;
             }
         }
 
         public Match GetMatchInfo(string endpoint, string timestamp)
         {
-            using (var database = new LiteDatabase(Program.databasePath))
+            try
             {
-                var matchesCollection = database.GetCollection<Match>("matches");
-                matchesCollection.EnsureIndex(x => x.Endpoint);
-                matchesCollection.EnsureIndex(x => x.StringTimestamp);
-                return Match.GetMatchInfo(matchesCollection, endpoint, timestamp);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var matchesCollection = database.GetCollection<Match>("matches");
+                    matchesCollection.EnsureIndex(x => x.Endpoint);
+                    matchesCollection.EnsureIndex(x => x.StringTimestamp);
+                    return Match.GetMatchInfo(matchesCollection, endpoint, timestamp);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP GET GetMatchInfo");
+                throw exc;
             }
         }
 
         public PlayerStatistics GetPlayerStats(string name)
         {
-            using (var database = new LiteDatabase(Program.databasePath))
+            try
             {
-                var matchesCollection = database.GetCollection<Match>("matches");
-                matchesCollection.EnsureIndex(x => x.Scoreboard.Select(y => y.NameInUpperCase));
-                return PlayerStatistics.GetPlayerStats(matchesCollection, name);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var matchesCollection = database.GetCollection<Match>("matches");
+                    matchesCollection.EnsureIndex(x => x.Scoreboard.Select(y => y.NameInUpperCase));
+                    return PlayerStatistics.GetPlayerStats(matchesCollection, name);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP GET GetPlayerStats");
+                throw exc;
             }
         }
 
@@ -96,11 +137,19 @@ namespace Kontur.GameStats.Server.Service
                     return new List<ServerReport>();
             }
 
-            using (var database = new LiteDatabase(Program.databasePath))
+            try
             {
-                var matchesCollection = database.GetCollection<Match>("matches");
-                var serversCollection = database.GetCollection<Classes.Server>("servers");
-                return ServerReport.GetPopularServers(matchesCollection, serversCollection, quantity);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var matchesCollection = database.GetCollection<Match>("matches");
+                    var serversCollection = database.GetCollection<Classes.Server>("servers");
+                    return ServerReport.GetPopularServers(matchesCollection, serversCollection, quantity);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP GET GetPopularServers");
+                throw exc;
             }
         }
 
@@ -116,40 +165,73 @@ namespace Kontur.GameStats.Server.Service
                 if (exc.Message == "Count is less or equal zero")
                     return new List<MatchReport>();
             }
-            using (var database = new LiteDatabase(Program.databasePath))
+
+            try
             {
-                var matchesCollection = database.GetCollection<Match>("matches");
-                matchesCollection.EnsureIndex(x => x.DateTimeTimestamp);
-                return MatchReport.GetRecentMatches(matchesCollection, quantity);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var matchesCollection = database.GetCollection<Match>("matches");
+                    matchesCollection.EnsureIndex(x => x.DateTimeTimestamp);
+                    return MatchReport.GetRecentMatches(matchesCollection, quantity);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP GET GetRecentMatches");
+                throw exc;
             }
         }
 
         public Classes.Server GetServerInfo(string endpoint)
         {
-            using (var database = new LiteDatabase(Program.databasePath))
+            try
             {
-                var serversCollection = database.GetCollection<Classes.Server>("servers");
-                serversCollection.EnsureIndex(x => x.Endpoint);
-                return Classes.Server.GetServerInfo(serversCollection, endpoint);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var serversCollection = database.GetCollection<Classes.Server>("servers");
+                    serversCollection.EnsureIndex(x => x.Endpoint);
+                    return Classes.Server.GetServerInfo(serversCollection, endpoint);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP GET GetServerInfo");
+                throw exc;
             }
         }
 
         public List<ServerInfo> GetServersInfo()
         {
-            using (var database = new LiteDatabase(Program.databasePath))
+            try
             {
-                var serversCollection = database.GetCollection<Classes.Server>("servers");
-                return ServerInfo.GetServersInfo(serversCollection);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var serversCollection = database.GetCollection<Classes.Server>("servers");
+                    return ServerInfo.GetServersInfo(serversCollection);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP GET GetServersInfo");
+                throw exc;
             }
         }
 
         public ServerStatistics GetServerStats(string endpoint)
         {
-            using (var database = new LiteDatabase(Program.databasePath))
+            try
             {
-                var matchesCollection = database.GetCollection<Match>("matches");
-                matchesCollection.EnsureIndex(x => x.Endpoint);
-                return ServerStatistics.GetServerStats(matchesCollection, endpoint);
+                using (var database = new LiteDatabase(Program.databasePath))
+                {
+                    var matchesCollection = database.GetCollection<Match>("matches");
+                    matchesCollection.EnsureIndex(x => x.Endpoint);
+                    return ServerStatistics.GetServerStats(matchesCollection, endpoint);
+                }
+            }
+            catch (Exception exc)
+            {
+                Program.log.Error(exc, "An error occured for HTTP GET GetServerStats");
+                throw exc;
             }
         }
 

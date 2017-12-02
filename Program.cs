@@ -1,4 +1,5 @@
 ﻿using Fclp;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,10 @@ namespace Kontur.GameStats.Server
     class Program
     {
         internal static readonly string databasePath = AppDomain.CurrentDomain.BaseDirectory + "Storage.db";
+        internal static Serilog.Core.Logger log = new LoggerConfiguration()
+                .MinimumLevel.Error()
+                .WriteTo.RollingFile(AppDomain.CurrentDomain.BaseDirectory + "log.txt")
+                .CreateLogger();
 
         static void Main(string[] args)
         {
@@ -50,6 +55,8 @@ namespace Kontur.GameStats.Server
 
             if (commandLineParser.Parse(args).HelpCalled)
                 return;
+
+
 
             ServiceHost serviceHost = new ServiceHost(typeof(Service.Service), new Uri(commandLineParser.Object.Prefix));
             bool openSucceeded = false;
