@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kontur.GameStats.Server.Classes;
 using LiteDB;
+using System.ServiceModel.Web;
 
 namespace Kontur.GameStats.Server.Service
 {
@@ -12,22 +13,33 @@ namespace Kontur.GameStats.Server.Service
     {
         public void AddMatchInfo(Match match, string endpoint, string timestamp)
         {
-            match.Endpoint = endpoint;
-            match.StringTimestamp = timestamp;
-            match.DateTimeTimestamp = Convert.ToDateTime(timestamp);
-            match.JustDateFromTimestamp = timestamp.Substring(0, 10);
-            double players = match.Scoreboard.Count();
-            foreach (Player item in match.Scoreboard)
-            {
-                if (players == 1)
-                    item.ScoreboardPercent = 100;
-                else
-                    item.ScoreboardPercent = (players - (Array.IndexOf(match.Scoreboard, item) + 1)) / (players - 1) * 100;
-            }
+
             using (var database = new LiteDatabase(@"Storage.db"))
             {
-                var userCollection = database.GetCollection<Match>("matches");
-                userCollection.Insert(match);
+                var matchesCollection = database.GetCollection<Match>("matches");
+
+                var serversCollection = database.GetCollection<Classes.Server>("servers");
+                if (!(serversCollection.FindOne(x => x.Endpoint == endpoint) == null))
+                {
+                    match.Endpoint = endpoint;
+                    match.StringTimestamp = timestamp;
+                    match.DateTimeTimestamp = Convert.ToDateTime(timestamp);
+                    match.JustDateFromTimestamp = timestamp.Substring(0, 10);
+                    double players = match.Scoreboard.Count();
+                    foreach (Player item in match.Scoreboard)
+                    {
+                        if (players == 1)
+                            item.ScoreboardPercent = 100;
+                        else
+                            item.ScoreboardPercent = (players - (Array.IndexOf(match.Scoreboard, item) + 1)) / (players - 1) * 100;
+                    }
+
+                    matchesCollection.Insert(match);
+                }
+                else
+                {
+                    throw new WebFaultException(System.Net.HttpStatusCode.BadRequest);
+                }
             }
         }
 
@@ -79,10 +91,16 @@ namespace Kontur.GameStats.Server.Service
         {
             using (var database = new LiteDatabase(@"Storage.db"))
             {
-                var userCollection = database.GetCollection<Match>("matches");
-                userCollection.EnsureIndex(x => x.Endpoint);
-                userCollection.EnsureIndex(x => x.StringTimestamp);
-                return userCollection.FindOne(x => x.Endpoint == endpoint && x.StringTimestamp == timestamp);
+                var matchCollection = database.GetCollection<Match>("matches");
+
+                if (!(matchCollection.FindOne(x => x.Endpoint == endpoint && x.StringTimestamp == timestamp) == null))
+                {
+                    matchCollection.EnsureIndex(x => x.Endpoint);
+                    matchCollection.EnsureIndex(x => x.StringTimestamp);
+                    return matchCollection.FindOne(x => x.Endpoint == endpoint && x.StringTimestamp == timestamp);
+                }
+                else
+                    throw new WebFaultException(System.Net.HttpStatusCode.NotFound);
             }
         }
 
@@ -204,9 +222,12 @@ namespace Kontur.GameStats.Server.Service
         {
             using (var database = new LiteDatabase(@"Storage.db"))
             {
-                var userCollection = database.GetCollection<Classes.Server>("servers");
-                userCollection.EnsureIndex(x => x.Endpoint);
-                return userCollection.FindOne(x => x.Endpoint == endpoint);
+                var serversCollection = database.GetCollection<Classes.Server>("servers");
+                serversCollection.EnsureIndex(x => x.Endpoint);
+                if (!(serversCollection.FindOne(x => x.Endpoint == endpoint) == null))
+                    return serversCollection.FindOne(x => x.Endpoint == endpoint);
+                else
+                    throw new WebFaultException(System.Net.HttpStatusCode.NotFound);
             }
         }
 
