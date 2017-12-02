@@ -13,6 +13,6 @@ namespace Kontur.GameStats.Server.Classes
         [DataMember(Name = "name", Order = 1)]
         public string Name { get; set; }
         [DataMember(Name = "killToDeathRatio", Order = 2)]
-        public double KillToDeathRatio { get; set; }
+        public float KillToDeathRatio { get; set; }
     }
 }

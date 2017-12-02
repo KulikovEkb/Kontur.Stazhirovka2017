@@ -15,11 +15,11 @@ namespace Kontur.GameStats.Server.Classes
         [DataMember(Name = "maximumMatchesPerDay", Order = 2)]
         public int MaximumMatchesPerDay { get; set; }
         [DataMember(Name = "averageMatchesPerDay", Order = 3)]
-        public double AverageMatchesPerDay { get; set; }
+        public float AverageMatchesPerDay { get; set; }
         [DataMember(Name = "maximumPopulation", Order = 4)]
         public int MaximumPopulation { get; set; }
         [DataMember(Name = "averagePopulation", Order = 5)]
-        public double AveragePopulation { get; set; }
+        public float AveragePopulation { get; set; }
         [DataMember(Name = "top5GameModes", Order = 6)]
         public List<string> Top5GameModes { get; set; }
         [DataMember(Name = "top5Maps", Order = 7)]

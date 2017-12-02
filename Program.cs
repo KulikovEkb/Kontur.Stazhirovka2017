@@ -35,13 +35,29 @@ namespace Kontur.GameStats.Server
                 return;
 
             ServiceHost serviceHost = new ServiceHost(typeof(Service.Service), new Uri(commandLineParser.Object.Prefix));
-            ServiceEndpoint serviceEndpoint = serviceHost.AddServiceEndpoint(typeof(Service.IService), new WebHttpBinding(), "");
-            serviceEndpoint.Behaviors.Add(new WebHttpBehavior());
-            serviceHost.Open();
+            bool openSucceeded = false;
+
+            try
+            {
+                ServiceEndpoint serviceEndpoint = serviceHost.AddServiceEndpoint(typeof(Service.IService), new WebHttpBinding(), "");
+                serviceEndpoint.Behaviors.Add(new WebHttpBehavior());
+                serviceHost.Open();
+                openSucceeded = true;
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine("Service host failed to open! - {0}", exc.ToString());
+                Console.ReadLine();
+            }
+            finally
+            {
+                if (!openSucceeded)
+                    serviceHost.Abort();
+            }
 
             if (serviceHost.State == CommunicationState.Opened)
             {
-                Console.WriteLine("Service is running at {0}! Press Enter to stop.", serviceEndpoint.Address);
+                Console.WriteLine("Service is up and running at {0}. Press Enter to stop.", commandLineParser.Object.Prefix);
                 Console.ReadLine();
             }
             else
@@ -50,7 +66,22 @@ namespace Kontur.GameStats.Server
                 Console.ReadLine();
             }
 
-            serviceHost.Close();
+            bool closeSucceeded = false;
+            try
+            {
+                serviceHost.Close();
+                closeSucceeded = true;
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine("Service failed to close - {0}", exc.ToString());
+                Console.ReadLine();
+            }
+            finally
+            {
+                if (!closeSucceeded)
+                    serviceHost.Abort();
+            }
         }
     }
 }

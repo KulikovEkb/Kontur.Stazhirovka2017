@@ -15,6 +15,6 @@ namespace Kontur.GameStats.Server.Classes
         [DataMember(Name = "name", Order = 2)]
         public string Name { get; set; }
         [DataMember(Name = "averageMatchesPerDay", Order = 3)]
-        public double AverageMatchesPerDay { get; set; }
+        public float AverageMatchesPerDay { get; set; }
     }
 }

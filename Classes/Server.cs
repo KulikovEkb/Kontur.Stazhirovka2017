@@ -16,7 +16,6 @@ namespace Kontur.GameStats.Server.Classes
         public string Name { get; set; }
         [DataMember(Name = "gameModes", Order = 2)]
         public string[] GameModes { get; set; }
-
         
         public string Endpoint { get; set; }
     }

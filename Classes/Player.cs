@@ -19,6 +19,7 @@ namespace Kontur.GameStats.Server.Classes
         [DataMember(Name = "deaths", Order = 4)]
         public int Deaths { get; set; }
 
-        public double ScoreboardPercent { get; set; }
+        public string NameInUpperCase { get; set; }
+        public float ScoreboardPercent { get; set; }
     }
 }

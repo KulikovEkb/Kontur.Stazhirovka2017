@@ -19,7 +19,7 @@ namespace Kontur.GameStats.Server.Classes
         [DataMember(Name = "timeLimit", Order = 4)]
         public int TimeLimit { get; set; }
         [DataMember(Name = "timeElapsed", Order = 5)]
-        public double TimeElapsed { get; set; }
+        public float TimeElapsed { get; set; }
         [DataMember(Name = "scoreboard", Order = 6)]
         public Player[] Scoreboard { get; set; }
 

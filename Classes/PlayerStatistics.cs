@@ -21,14 +21,14 @@ namespace Kontur.GameStats.Server.Classes
         [DataMember(Name = "favoriteGameMode", Order = 5)]
         public string FavoriteGameMode { get; set; }
         [DataMember(Name = "averageScoreboardPercent", Order = 6)]
-        public double AverageScoreboardPercent { get; set; }
+        public float AverageScoreboardPercent { get; set; }
         [DataMember(Name = "maximumMatchesPerDay", Order = 7)]
         public int MaximumMatchesPerDay { get; set; }
         [DataMember(Name = "averageMatchesPerDay", Order = 8)]
-        public double AverageMatchesPerDay { get; set; }
+        public float AverageMatchesPerDay { get; set; }
         [DataMember(Name = "lastMatchPlayed", Order = 9)]
         public string LastMatchPlayed { get; set; }
         [DataMember(Name = "killToDeathRatio", Order = 10)]
-        public double KillToDeathRatio { get; set; }
+        public float KillToDeathRatio { get; set; }
     }
 }
