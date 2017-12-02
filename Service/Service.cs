@@ -32,30 +32,21 @@ namespace Kontur.GameStats.Server.Service
 
         public void AddMatchInfo(Match match, string endpoint, string timestamp)
         {
-
             using (var database = new LiteDatabase(Program.databasePath))
             {
                 var matchesCollection = database.GetCollection<Match>("matches");
                 var serversCollection = database.GetCollection<Classes.Server>("servers");
                 Match.AddMatchInfo(matchesCollection, serversCollection, match, endpoint, timestamp);
             }
-
         }
 
         public void AddServerInfo(Classes.Server server, string endpoint)
         {
-            try
+            using (var database = new LiteDatabase(Program.databasePath))
             {
-                using (var database = new LiteDatabase(Program.databasePath))
-                {
-                    var serversCollection = database.GetCollection<Classes.Server>("servers");
-                    serversCollection.EnsureIndex(x => x.Endpoint);
-                    Classes.Server.AddServerInfo(serversCollection, server, endpoint);
-                }
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine(exc.Message);
+                var serversCollection = database.GetCollection<Classes.Server>("servers");
+                serversCollection.EnsureIndex(x => x.Endpoint);
+                Classes.Server.AddServerInfo(serversCollection, server, endpoint);
             }
         }
 
@@ -71,7 +62,6 @@ namespace Kontur.GameStats.Server.Service
                 if (exc.Message == "Count is less or equal zero")
                     return new List<PlayerReport>();
             }
-
             using (var database = new LiteDatabase(Program.databasePath))
             {
                 var matchesCollection = database.GetCollection<Match>("matches");

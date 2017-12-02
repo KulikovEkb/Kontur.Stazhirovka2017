@@ -52,16 +52,12 @@ namespace Kontur.GameStats.Server.Classes
         public static PlayerStatistics GetPlayerStats(LiteCollection<Match> matchesCollection, string name)
         {
             name = HttpUtility.UrlDecode(name).ToUpper();
-            var playerMatches = matchesCollection
-                .FindAll()
-                .Where(x => x.Scoreboard.Any(y => y.NameInUpperCase == name));
+            var playerMatches = matchesCollection.FindAll().Where(x => x.Scoreboard.Any(y => y.NameInUpperCase == name));
             var playerStats = new PlayerStatistics();
 
             playerStats.TotalMatchesPlayed = playerMatches.Count();
 
-            playerStats.TotalMatchesWon = playerMatches
-                .Where(x => x.Scoreboard[0].NameInUpperCase == name)
-                .Count();
+            playerStats.TotalMatchesWon = playerMatches.Count(x => x.Scoreboard[0].NameInUpperCase == name);
 
             playerStats.FavoriteServer = playerMatches
                 .GroupBy(x => x.Endpoint)
@@ -69,9 +65,7 @@ namespace Kontur.GameStats.Server.Classes
                 .Select(x => x.Key)
                 .First();
 
-            playerStats.UniqueServers = playerMatches
-                .GroupBy(x => x.Endpoint)
-                .Count();
+            playerStats.UniqueServers = playerMatches.GroupBy(x => x.Endpoint).Count();
 
             playerStats.FavoriteGameMode = playerMatches
                 .GroupBy(x => x.GameMode)

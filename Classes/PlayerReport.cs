@@ -21,8 +21,7 @@ namespace Kontur.GameStats.Server.Classes
             get { return killToDeathRatio; }
             set { killToDeathRatio = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
         }
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
         static public List<PlayerReport> GetBestPlayers(LiteCollection<Match> matchesCollection, int quantity)
         {
             var bestPlayers = matchesCollection.FindAll()
@@ -34,8 +33,7 @@ namespace Kontur.GameStats.Server.Classes
                     .OrderByDescending(x => x.KillToDeathRatio)
                     .Take(quantity);
 
-
-            var result = new List<PlayerReport>();
+            var result = new List<PlayerReport>(quantity);
             foreach (var item in bestPlayers)
             {
                 result.Add(new PlayerReport { KillToDeathRatio = item.KillToDeathRatio, Name = item.Name });
