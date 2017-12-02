@@ -23,6 +23,7 @@ namespace Kontur.GameStats.Server.Classes
 
         public static void AddServerInfo(LiteCollection<Classes.Server> serversCollection, Classes.Server server, string endpoint)
         {
+            server.Endpoint = endpoint;
             if (serversCollection.FindOne(x => x.Endpoint == endpoint) == null)
                 serversCollection.Insert(server);
             else

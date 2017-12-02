@@ -10,30 +10,28 @@ using System.ServiceModel.Web;
 namespace Kontur.GameStats.Server.ServiceTests
 {
     [TestFixture]
-    class GetServerTest
+    public class GetServerTest
     {
         [SetUp]
-        public static void InsertData()
+        public void InsertData()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
                 var serversCollection = testDatabase.GetCollection<Classes.Server>("servers");
+                serversCollection.EnsureIndex(x => x.Endpoint);
 
                 Classes.Server.AddServerInfo(serversCollection,
                     new Classes.Server
                     {
                         Name = "] My P3rfect Server [",
-                        GameModes = new[] { "DM", "TDM" },
-                        Endpoint = "167.42.23.32-1337"
+                        GameModes = new[] { "DM", "TDM" }
                     },
                     "167.42.23.32-1337");
-
-                serversCollection.EnsureIndex(x => x.Endpoint);
             }
         }
 
         [TearDown]
-        public static void DropDatabase()
+        public void DropDatabase()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
@@ -42,7 +40,7 @@ namespace Kontur.GameStats.Server.ServiceTests
         }
 
         [Test]
-        public static void TestServerGetting()
+        public void TestServerGetting()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
@@ -54,7 +52,7 @@ namespace Kontur.GameStats.Server.ServiceTests
         }
 
         [Test]
-        public static void TestServerGettingException()
+        public void TestServerGettingWithWrongEndpoint()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {

@@ -51,6 +51,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Channels" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,9 +71,16 @@
     <Compile Include="Classes\ServerStatistics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceTests\AddMatchTest.cs" />
-    <Compile Include="ServiceTests\AddServerTest.cs" />
-    <Compile Include="ServiceTests\CheckCountTest.cs" />
+    <Compile Include="ServiceTests\AddMatchTests.cs" />
+    <Compile Include="ServiceTests\AddServerTests.cs" />
+    <Compile Include="ServiceTests\CheckCountTests.cs" />
+    <Compile Include="ServiceTests\GetMatchReportTests.cs" />
+    <Compile Include="ServiceTests\GetMatchTests.cs" />
+    <Compile Include="ServiceTests\GetPlayerReportTests.cs" />
+    <Compile Include="ServiceTests\GetPlayerStatsTests.cs" />
+    <Compile Include="ServiceTests\GetPopularServersTest.cs" />
+    <Compile Include="ServiceTests\GetServerStatsTest.cs" />
+    <Compile Include="ServiceTests\GetServersTests.cs" />
     <Compile Include="ServiceTests\GetServerTest.cs" />
     <Compile Include="Service\IService.cs" />
     <Compile Include="Service\Service.cs" />

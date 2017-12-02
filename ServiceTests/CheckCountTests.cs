@@ -8,27 +8,27 @@ using NUnit.Framework;
 namespace Kontur.GameStats.Server.ServiceTests
 {
     [TestFixture]
-    class CheckCountTest
+    public class CheckCountTests
     {
         [Test]
-        public static void CheckCountGreaterFifty()
+        public void CheckCountGreaterFiftyTest()
         {
             Assert.AreEqual(50, new Service.Service().CheckCount("51"));
         }
         [Test]
-        public static void CheckCountEqualZero()
+        public void CheckCountEqualZeroTest()
         {
             var exception = Assert.Throws<Exception>(() => new Service.Service().CheckCount("0"));
             Assert.AreEqual("Count is less or equal zero", exception.Message);
         }
         [Test]
-        public static void CheckCountLessZero()
+        public void CheckCountLessZeroTest()
         {
             var exception = Assert.Throws<Exception>(() => new Service.Service().CheckCount("-1"));
             Assert.AreEqual("Count is less or equal zero", exception.Message);
         }
         [Test]
-        public static void CheckCountBetweenZeroAndFifty()
+        public void CheckCountBetweenZeroAndFiftyTest()
         {
             Assert.AreEqual(8, new Service.Service().CheckCount("8"));
         }

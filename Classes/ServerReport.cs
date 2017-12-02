@@ -26,7 +26,7 @@ namespace Kontur.GameStats.Server.Classes
 
         public static List<ServerReport> GetPopularServers(LiteCollection<Match> matchesCollection, LiteCollection<Classes.Server> serversCollection, int quantity)
         {
-            var tempResult = new List<ServerReport>();
+            var tempResult = new List<ServerReport>(quantity);
 
             var serverEndpoints = matchesCollection.FindAll()
                 .GroupBy(x => x.Endpoint)
@@ -37,10 +37,12 @@ namespace Kontur.GameStats.Server.Classes
                 tempResult.Add(new ServerReport
                 {
                     Endpoint = item.Endpoint,
-                    AverageMatchesPerDay = matchesCollection.FindAll()
-                .Where(x => x.Endpoint == item.Endpoint)
-                .GroupBy(x => x.JustDateFromTimestamp)
-                .Select(x => x.Count()).Average(),
+                    AverageMatchesPerDay = matchesCollection
+                    .FindAll()
+                    .Where(x => x.Endpoint == item.Endpoint)
+                    .GroupBy(x => x.JustDateFromTimestamp)
+                    .Select(x => x.Count())
+                    .Average(),
                     Name = serversCollection.FindOne(x => x.Endpoint == item.Endpoint).Name
                 });
             }

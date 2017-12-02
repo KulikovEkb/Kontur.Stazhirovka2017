@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using LiteDB;
+using System.Web;
 
 namespace Kontur.GameStats.Server.Classes
 {
@@ -50,8 +51,10 @@ namespace Kontur.GameStats.Server.Classes
 
         public static PlayerStatistics GetPlayerStats(LiteCollection<Match> matchesCollection, string name)
         {
-            var playerMatches = matchesCollection.FindAll()
-                    .Where(x => x.Scoreboard.Any(y => y.NameInUpperCase == name));
+            name = HttpUtility.UrlDecode(name).ToUpper();
+            var playerMatches = matchesCollection
+                .FindAll()
+                .Where(x => x.Scoreboard.Any(y => y.NameInUpperCase == name));
             var playerStats = new PlayerStatistics();
 
             playerStats.TotalMatchesPlayed = playerMatches.Count();

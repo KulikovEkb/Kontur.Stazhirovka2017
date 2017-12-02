@@ -46,7 +46,6 @@ namespace Kontur.GameStats.Server.Service
         {
             try
             {
-                server.Endpoint = endpoint;
                 using (var database = new LiteDatabase(Program.databasePath))
                 {
                     var serversCollection = database.GetCollection<Classes.Server>("servers");
@@ -72,9 +71,6 @@ namespace Kontur.GameStats.Server.Service
                 if (exc.Message == "Count is less or equal zero")
                     return new List<PlayerReport>();
             }
-            //int quantity = CheckCount(count);
-            //if (quantity <= 0)
-            //    return new List<PlayerReport>();
 
             using (var database = new LiteDatabase(Program.databasePath))
             {
@@ -97,7 +93,6 @@ namespace Kontur.GameStats.Server.Service
 
         public PlayerStatistics GetPlayerStats(string name)
         {
-            name = name.ToUpper();
             using (var database = new LiteDatabase(Program.databasePath))
             {
                 var matchesCollection = database.GetCollection<Match>("matches");
@@ -118,9 +113,6 @@ namespace Kontur.GameStats.Server.Service
                 if (exc.Message == "Count is less or equal zero")
                     return new List<ServerReport>();
             }
-            //int quantity = CheckCount(count);
-            //if (quantity <= 0)
-            //    return new List<ServerReport>();
 
             using (var database = new LiteDatabase(Program.databasePath))
             {
@@ -142,9 +134,6 @@ namespace Kontur.GameStats.Server.Service
                 if (exc.Message == "Count is less or equal zero")
                     return new List<MatchReport>();
             }
-            //int quantity = CheckCount(count);
-            //if (quantity <= 0)
-            //    return new List<MatchReport>();
             using (var database = new LiteDatabase(Program.databasePath))
             {
                 var matchesCollection = database.GetCollection<Match>("matches");

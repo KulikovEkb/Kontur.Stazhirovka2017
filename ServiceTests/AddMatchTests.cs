@@ -10,30 +10,28 @@ using System.Threading.Tasks;
 namespace Kontur.GameStats.Server.ServiceTests
 {
     [TestFixture]
-    class AddMatchTest
+    public class AddMatchTests
     {
         [SetUp]
-        public static void InsertData()
+        public void InsertData()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
                 var serversCollection = testDatabase.GetCollection<Classes.Server>("servers");
+                serversCollection.EnsureIndex(x => x.Endpoint);
 
                 Classes.Server.AddServerInfo(serversCollection,
                     new Classes.Server
                     {
                         Name = "] My P3rfect Server [",
-                        GameModes = new[] { "DM", "TDM" },
-                        Endpoint = "167.42.23.32-1337"
+                        GameModes = new[] { "DM", "TDM" }
                     },
                     "167.42.23.32-1337");
-
-                serversCollection.EnsureIndex(x => x.Endpoint);
             }
         }
 
         [TearDown]
-        public static void DropDatabase()
+        public void DropDatabase()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
@@ -43,7 +41,7 @@ namespace Kontur.GameStats.Server.ServiceTests
         }
 
         [Test]
-        public static void TestMatchWith1PlayerAddition()
+        public void TestMatchWith1PlayerAddition()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
@@ -79,7 +77,7 @@ namespace Kontur.GameStats.Server.ServiceTests
         }
 
         [Test]
-        public static void TestMatchWith2PlayersAddition()
+        public void TestMatchWith2PlayersAddition()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
@@ -117,7 +115,7 @@ namespace Kontur.GameStats.Server.ServiceTests
         }
 
         [Test]
-        public static void TestMatchWith3PlayersAddition()
+        public void TestMatchWith3PlayersAddition()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
@@ -157,7 +155,7 @@ namespace Kontur.GameStats.Server.ServiceTests
         }
 
         [Test]
-        public static void TestMatchWith4PlayersAddition()
+        public void TestMatchWith4PlayersAddition()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
@@ -199,7 +197,7 @@ namespace Kontur.GameStats.Server.ServiceTests
         }
 
         [Test]
-        public static void TestMatchAdditionException()
+        public void TestMatchAdditionWithWrongEndpoint()
         {
             using (var testDatabase = new LiteDatabase(AppDomain.CurrentDomain.BaseDirectory + "TestStorage.db"))
             {
@@ -223,7 +221,7 @@ namespace Kontur.GameStats.Server.ServiceTests
                             new Classes.Player { Name = "Player4", Frags = 0, Kills = 0, Deaths = 25}
                         }
                     },
-                    "127.0.0.1-1338",
+                    "127.0.0.1-8080",
                     "2017-01-22T15:17:00Z")
                     );
 
