@@ -20,12 +20,6 @@ namespace Kontur.GameStats.Server.Classes
         public int Deaths { get; set; }
 
         public string NameInUpperCase { get; set; }
-
-        double scoreboardPercent;
-        public double ScoreboardPercent
-        {
-            get { return scoreboardPercent; }
-            set { scoreboardPercent = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
-        }
+        public double ScoreboardPercent { get; set; }
     }
 }

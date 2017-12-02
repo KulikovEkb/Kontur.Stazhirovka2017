@@ -11,10 +11,10 @@ namespace Kontur.GameStats.Server.Classes
     [DataContract(Name = "playerReport")]
     public class PlayerReport
     {
+        double killToDeathRatio;
+
         [DataMember(Name = "name", Order = 1)]
         public string Name { get; set; }
-
-        double killToDeathRatio;
         [DataMember(Name = "killToDeathRatio", Order = 2)]
         public double KillToDeathRatio
         {

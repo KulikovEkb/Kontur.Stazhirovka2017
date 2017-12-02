@@ -11,30 +11,27 @@ namespace Kontur.GameStats.Server.Classes
     [DataContract(Name = "serverStatistics")]
     public class ServerStatistics
     {
+        double averageMatchesPerDay;
+        double averagePopulation;
+
         [DataMember(Name = "totalMatchesPlayed", Order = 1)]
         public int TotalMatchesPlayed { get; set; }
         [DataMember(Name = "maximumMatchesPerDay", Order = 2)]
         public int MaximumMatchesPerDay { get; set; }
-
-        double averageMatchesPerDay;
         [DataMember(Name = "averageMatchesPerDay", Order = 3)]
         public double AverageMatchesPerDay
         {
             get { return averageMatchesPerDay; }
             set { averageMatchesPerDay = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
         }
-
         [DataMember(Name = "maximumPopulation", Order = 4)]
         public int MaximumPopulation { get; set; }
-
-        double averagePopulation;
         [DataMember(Name = "averagePopulation", Order = 5)]
         public double AveragePopulation
         {
             get { return averagePopulation; }
             set { averagePopulation = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
         }
-
         [DataMember(Name = "top5GameModes", Order = 6)]
         public List<string> Top5GameModes { get; set; }
         [DataMember(Name = "top5Maps", Order = 7)]
@@ -42,32 +39,29 @@ namespace Kontur.GameStats.Server.Classes
 
         public static ServerStatistics GetServerStats(LiteCollection<Match> matchesCollection, string endpoint)
         {
-            var matches = matchesCollection.Find(x => x.Endpoint == endpoint);
+            var matchesOnThatServer = matchesCollection.Find(x => x.Endpoint == endpoint);
             var result = new ServerStatistics();
-            result.TotalMatchesPlayed = matches.Count();
 
-            result.MaximumMatchesPerDay = matches
+            result.TotalMatchesPlayed = matchesOnThatServer.Count();
+
+            result.MaximumMatchesPerDay = matchesOnThatServer
                 .GroupBy(x => x.JustDateFromTimestamp)
                 .Max(x => x.Count());
 
-            int daysOfServer = ((matches.Min(x => x.DateTimeTimestamp)) - (matchesCollection.Max(x => x.DateTimeTimestamp))).Days;
+            int daysOfServer = ((matchesCollection.FindAll().Max(x => x.DateTimeTimestamp).Day) - (matchesOnThatServer.Min(x => x.DateTimeTimestamp).Day)) + 1;
             result.AverageMatchesPerDay = (double)result.TotalMatchesPlayed / daysOfServer;
 
-            //result.AverageMatchesPerDay = (float)matches
-            //    .GroupBy(x => x.JustDateFromTimestamp)
-            //    .Average(x => x.Count());
+            result.MaximumPopulation = matchesOnThatServer.Max(x => x.Scoreboard.Count());
 
-            result.MaximumPopulation = matches.Max(x => x.Scoreboard.Count());
+            result.AveragePopulation = matchesOnThatServer.Average(x => x.Scoreboard.Count());
 
-            result.AveragePopulation = matches.Average(x => x.Scoreboard.Count());
-
-            result.Top5GameModes = new List<string>(matches
+            result.Top5GameModes = new List<string>(matchesOnThatServer
                 .GroupBy(x => x.GameMode)
                 .OrderByDescending(x => x.Count())
                 .Select(x => x.Key)
                 .Take(5));
 
-            result.Top5Maps = new List<string>(matches
+            result.Top5Maps = new List<string>(matchesOnThatServer
                 .GroupBy(x => x.Map)
                 .OrderByDescending(x => x.Count())
                 .Select(x => x.Key)

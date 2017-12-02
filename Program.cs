@@ -31,6 +31,8 @@ namespace Kontur.GameStats.Server
 
     class Program
     {
+        internal static readonly string databasePath = AppDomain.CurrentDomain.BaseDirectory + "Storage.db";
+
         static void Main(string[] args)
         {
             var commandLineParser = new FluentCommandLineParser<Options>();

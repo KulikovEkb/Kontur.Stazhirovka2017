@@ -11,12 +11,12 @@ namespace Kontur.GameStats.Server.Classes
     [DataContract(Name = "serverReport")]
     public class ServerReport
     {
+        double averageMatchesPerDay;
+
         [DataMember(Name = "endpoint", Order = 1)]
         public string Endpoint { get; set; }
         [DataMember(Name = "name", Order = 2)]
         public string Name { get; set; }
-
-        double averageMatchesPerDay;
         [DataMember(Name = "averageMatchesPerDay", Order = 3)]
         public double AverageMatchesPerDay
         {

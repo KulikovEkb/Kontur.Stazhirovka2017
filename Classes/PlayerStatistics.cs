@@ -11,6 +11,10 @@ namespace Kontur.GameStats.Server.Classes
     [DataContract(Name = "playerStatistics")]
     public class PlayerStatistics
     {
+        double averageScoreboardPercent;
+        double averageMatchesPerDay;
+        double killToDeathRatio;
+
         [DataMember(Name = "totalMatchesPlayed", Order = 1)]
         public int TotalMatchesPlayed { get; set; }
         [DataMember(Name = "totalMatchesWon", Order = 2)]
@@ -21,30 +25,22 @@ namespace Kontur.GameStats.Server.Classes
         public int UniqueServers { get; set; }
         [DataMember(Name = "favoriteGameMode", Order = 5)]
         public string FavoriteGameMode { get; set; }
-
-        double averageScoreboardPercent;
         [DataMember(Name = "averageScoreboardPercent", Order = 6)]
         public double AverageScoreboardPercent
         {
             get { return averageScoreboardPercent; }
             set { averageScoreboardPercent = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
         }
-
         [DataMember(Name = "maximumMatchesPerDay", Order = 7)]
         public int MaximumMatchesPerDay { get; set; }
-
-        double averageMatchesPerDay;
         [DataMember(Name = "averageMatchesPerDay", Order = 8)]
         public double AverageMatchesPerDay
         {
             get { return averageMatchesPerDay; }
             set { averageMatchesPerDay = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
         }
-
         [DataMember(Name = "lastMatchPlayed", Order = 9)]
         public string LastMatchPlayed { get; set; }
-
-        double killToDeathRatio;
         [DataMember(Name = "killToDeathRatio", Order = 10)]
         public double KillToDeathRatio
         {
@@ -57,6 +53,7 @@ namespace Kontur.GameStats.Server.Classes
             var playerMatches = matchesCollection.FindAll()
                     .Where(x => x.Scoreboard.Any(y => y.NameInUpperCase == name));
             var playerStats = new PlayerStatistics();
+
             playerStats.TotalMatchesPlayed = playerMatches.Count();
 
             playerStats.TotalMatchesWon = playerMatches
@@ -89,13 +86,8 @@ namespace Kontur.GameStats.Server.Classes
                 .Select(x => x.Count())
                 .First();
 
-            int daysOfPlayer = ((playerMatches.Min(x => x.DateTimeTimestamp)) - (matchesCollection.Max(x => x.DateTimeTimestamp))).Days;
+            int daysOfPlayer = ((matchesCollection.FindAll().Max(x => x.DateTimeTimestamp).Day) - (playerMatches.Min(x => x.DateTimeTimestamp).Day)) + 1;
             playerStats.AverageMatchesPerDay = (double)playerStats.TotalMatchesPlayed / daysOfPlayer;
-
-            //playerStats.AverageMatchesPerDay = (float)playerMatches
-            //    .GroupBy(x => x.JustDateFromTimestamp)
-            //    .Select(x => x.Count())
-            //    .Average();
 
             playerStats.LastMatchPlayed = playerMatches
                 .OrderByDescending(x => x.DateTimeTimestamp)

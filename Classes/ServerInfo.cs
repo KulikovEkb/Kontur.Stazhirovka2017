@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace Kontur.GameStats.Server.Classes
 {
@@ -14,5 +15,16 @@ namespace Kontur.GameStats.Server.Classes
         public string Endpoint { get; set; }
         [DataMember(Name = "info", Order = 2)]
         public Server Info { get; set; }
+
+        public static List<ServerInfo> GetServersInfo(LiteCollection<Classes.Server> serversCollection)
+        {
+            var servers = serversCollection.FindAll();
+            var result = new List<ServerInfo>();
+            foreach (Classes.Server item in servers)
+            {
+                result.Add(new ServerInfo { Endpoint = item.Endpoint, Info = item });
+            }
+            return result;
+        }
     }
 }
