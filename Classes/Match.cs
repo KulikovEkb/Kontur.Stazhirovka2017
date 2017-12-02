@@ -18,8 +18,15 @@ namespace Kontur.GameStats.Server.Classes
         public int FragLimit { get; set; }
         [DataMember(Name = "timeLimit", Order = 4, IsRequired = true)]
         public int TimeLimit { get; set; }
+
+        double timeElapsed;
         [DataMember(Name = "timeElapsed", Order = 5, IsRequired = true)]
-        public float TimeElapsed { get; set; }
+        public double TimeElapsed
+        {
+            get { return timeElapsed; }
+            set { timeElapsed = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
+        }
+
         [DataMember(Name = "scoreboard", Order = 6, IsRequired = true)]
         public List<Player> Scoreboard { get; set; }
 

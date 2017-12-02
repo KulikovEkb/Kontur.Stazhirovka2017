@@ -37,7 +37,7 @@ namespace Kontur.GameStats.Server.Service
                         for (int i = 0; i < playersCount; i++)
                         {
                             match.Scoreboard[i].NameInUpperCase = match.Scoreboard[i].Name.ToUpper();
-                            match.Scoreboard[i].ScoreboardPercent = (float)(playersCount - (i + 1)) / (playersCount - 1) * 100;
+                            match.Scoreboard[i].ScoreboardPercent = (double)(playersCount - (i + 1)) / (playersCount - 1) * 100;
                         }
                     }
                 }

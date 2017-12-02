@@ -13,8 +13,14 @@ namespace Kontur.GameStats.Server.Classes
     {
         [DataMember(Name = "name", Order = 1)]
         public string Name { get; set; }
+
+        double killToDeathRatio;
         [DataMember(Name = "killToDeathRatio", Order = 2)]
-        public float KillToDeathRatio { get; set; }
+        public double KillToDeathRatio
+        {
+            get { return killToDeathRatio; }
+            set { killToDeathRatio = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
+        }
 
         static public List<PlayerReport> GetBestPlayers(LiteCollection<Match> matchesCollection, int quantity)
         {
@@ -23,7 +29,7 @@ namespace Kontur.GameStats.Server.Classes
                     .GroupBy(x => x.Name)
                     .Select(x => new { Name = x.Key, KillsSum = x.Sum(y => y.Kills), DeathsSum = x.Sum(y => y.Deaths), PlayedMatches = x.Count() })
                     .Where(x => x.DeathsSum > 0 && x.PlayedMatches >= 10)
-                    .Select(x => new { Name = x.Name, KillToDeathRatio = (float)x.KillsSum / x.DeathsSum })
+                    .Select(x => new { Name = x.Name, KillToDeathRatio = (double)x.KillsSum / x.DeathsSum })
                     .OrderByDescending(x => x.KillToDeathRatio)
                     .Take(quantity);
 

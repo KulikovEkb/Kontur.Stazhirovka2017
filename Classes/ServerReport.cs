@@ -15,8 +15,14 @@ namespace Kontur.GameStats.Server.Classes
         public string Endpoint { get; set; }
         [DataMember(Name = "name", Order = 2)]
         public string Name { get; set; }
+
+        double averageMatchesPerDay;
         [DataMember(Name = "averageMatchesPerDay", Order = 3)]
-        public float AverageMatchesPerDay { get; set; }
+        public double AverageMatchesPerDay
+        {
+            get { return averageMatchesPerDay; }
+            set { averageMatchesPerDay = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
+        }
 
         public static List<ServerReport> GetPopularServers(LiteCollection<Match> matchesCollection, LiteCollection<Classes.Server> serversCollection, int quantity)
         {
@@ -31,7 +37,7 @@ namespace Kontur.GameStats.Server.Classes
                 tempResult.Add(new ServerReport
                 {
                     Endpoint = item.Endpoint,
-                    AverageMatchesPerDay = (float)matchesCollection.FindAll()
+                    AverageMatchesPerDay = matchesCollection.FindAll()
                 .Where(x => x.Endpoint == item.Endpoint)
                 .GroupBy(x => x.JustDateFromTimestamp)
                 .Select(x => x.Count()).Average(),

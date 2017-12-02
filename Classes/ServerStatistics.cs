@@ -15,12 +15,26 @@ namespace Kontur.GameStats.Server.Classes
         public int TotalMatchesPlayed { get; set; }
         [DataMember(Name = "maximumMatchesPerDay", Order = 2)]
         public int MaximumMatchesPerDay { get; set; }
+
+        double averageMatchesPerDay;
         [DataMember(Name = "averageMatchesPerDay", Order = 3)]
-        public float AverageMatchesPerDay { get; set; }
+        public double AverageMatchesPerDay
+        {
+            get { return averageMatchesPerDay; }
+            set { averageMatchesPerDay = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
+        }
+
         [DataMember(Name = "maximumPopulation", Order = 4)]
         public int MaximumPopulation { get; set; }
+
+        double averagePopulation;
         [DataMember(Name = "averagePopulation", Order = 5)]
-        public float AveragePopulation { get; set; }
+        public double AveragePopulation
+        {
+            get { return averagePopulation; }
+            set { averagePopulation = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
+        }
+
         [DataMember(Name = "top5GameModes", Order = 6)]
         public List<string> Top5GameModes { get; set; }
         [DataMember(Name = "top5Maps", Order = 7)]
@@ -37,15 +51,15 @@ namespace Kontur.GameStats.Server.Classes
                 .Max(x => x.Count());
 
             int daysOfServer = ((matches.Min(x => x.DateTimeTimestamp)) - (matchesCollection.Max(x => x.DateTimeTimestamp))).Days;
-            result.AverageMatchesPerDay = (float)result.TotalMatchesPlayed / daysOfServer;
-            
+            result.AverageMatchesPerDay = (double)result.TotalMatchesPlayed / daysOfServer;
+
             //result.AverageMatchesPerDay = (float)matches
             //    .GroupBy(x => x.JustDateFromTimestamp)
             //    .Average(x => x.Count());
 
             result.MaximumPopulation = matches.Max(x => x.Scoreboard.Count());
 
-            result.AveragePopulation = (float)matches.Average(x => x.Scoreboard.Count());
+            result.AveragePopulation = matches.Average(x => x.Scoreboard.Count());
 
             result.Top5GameModes = new List<string>(matches
                 .GroupBy(x => x.GameMode)

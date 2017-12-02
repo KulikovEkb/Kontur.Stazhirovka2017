@@ -21,16 +21,36 @@ namespace Kontur.GameStats.Server.Classes
         public int UniqueServers { get; set; }
         [DataMember(Name = "favoriteGameMode", Order = 5)]
         public string FavoriteGameMode { get; set; }
+
+        double averageScoreboardPercent;
         [DataMember(Name = "averageScoreboardPercent", Order = 6)]
-        public float AverageScoreboardPercent { get; set; }
+        public double AverageScoreboardPercent
+        {
+            get { return averageScoreboardPercent; }
+            set { averageScoreboardPercent = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
+        }
+
         [DataMember(Name = "maximumMatchesPerDay", Order = 7)]
         public int MaximumMatchesPerDay { get; set; }
+
+        double averageMatchesPerDay;
         [DataMember(Name = "averageMatchesPerDay", Order = 8)]
-        public float AverageMatchesPerDay { get; set; }
+        public double AverageMatchesPerDay
+        {
+            get { return averageMatchesPerDay; }
+            set { averageMatchesPerDay = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
+        }
+
         [DataMember(Name = "lastMatchPlayed", Order = 9)]
         public string LastMatchPlayed { get; set; }
+
+        double killToDeathRatio;
         [DataMember(Name = "killToDeathRatio", Order = 10)]
-        public float KillToDeathRatio { get; set; }
+        public double KillToDeathRatio
+        {
+            get { return killToDeathRatio; }
+            set { killToDeathRatio = Math.Round(value, 6, MidpointRounding.AwayFromZero); }
+        }
 
         public static PlayerStatistics GetPlayerStats(LiteCollection<Match> matchesCollection, string name)
         {
@@ -70,7 +90,7 @@ namespace Kontur.GameStats.Server.Classes
                 .First();
 
             int daysOfPlayer = ((playerMatches.Min(x => x.DateTimeTimestamp)) - (matchesCollection.Max(x => x.DateTimeTimestamp))).Days;
-            playerStats.AverageMatchesPerDay = (float)playerStats.TotalMatchesPlayed / daysOfPlayer;
+            playerStats.AverageMatchesPerDay = (double)playerStats.TotalMatchesPlayed / daysOfPlayer;
 
             //playerStats.AverageMatchesPerDay = (float)playerMatches
             //    .GroupBy(x => x.JustDateFromTimestamp)
@@ -88,7 +108,7 @@ namespace Kontur.GameStats.Server.Classes
             int totalDeaths = playerMatches
                 .SelectMany(x => x.Scoreboard.Where(y => y.NameInUpperCase == name).Select(z => z.Deaths))
                 .Sum();
-            playerStats.KillToDeathRatio = (float)totalKills / totalDeaths;
+            playerStats.KillToDeathRatio = (double)totalKills / totalDeaths;
 
             return playerStats;
         }
