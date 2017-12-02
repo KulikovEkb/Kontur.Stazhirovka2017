@@ -11,14 +11,6 @@ namespace Kontur.GameStats.Server.Service
 {
     class Service : IService
     {
-        //internal int CheckCount(string count)
-        //{
-        //    int quantity = Convert.ToInt32(count);
-        //    if (quantity > 50)
-        //        return 50;
-        //    else
-        //        return quantity;
-        //}
         internal int CheckCount(string count)
         {
             int quantity = Convert.ToInt32(count);
