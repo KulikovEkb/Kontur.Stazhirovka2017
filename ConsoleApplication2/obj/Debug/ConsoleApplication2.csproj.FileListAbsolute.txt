@@ -1,0 +1,6 @@
+C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe.config
+C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
+C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
+C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication2\obj\Debug\ConsoleApplication2.csprojResolveAssemblyReference.cache
+C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication2\obj\Debug\ConsoleApplication2.exe
+C:\Users\Mega\Downloads\SKB_stazhirovka\2017\ConsoleApplication2\obj\Debug\ConsoleApplication2.pdb

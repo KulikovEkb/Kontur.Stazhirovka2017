@@ -1,0 +1,13 @@
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\Kontur.GameStats.Server.exe.config
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\Kontur.GameStats.Server.exe
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\Kontur.GameStats.Server.pdb
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\FluentCommandLineParser.dll
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\LiteDB.dll
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\nunit.framework.dll
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\FluentCommandLineParser.pdb
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\FluentCommandLineParser.xml
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\LiteDB.xml
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debug\nunit.framework.xml
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\obj\Debug\Kontur.GameStats.Server.csprojResolveAssemblyReference.cache
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\obj\Debug\Kontur.GameStats.Server.exe
+C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\obj\Debug\Kontur.GameStats.Server.pdb

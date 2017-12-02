@@ -1,0 +1,23 @@
+version: '2'
+
+services:      
+  consoleapp:
+    build: ./console-sample
+    image: serilog-console-sample
+  websample:
+    build: ./web-sample
+    image: serilog-web-sample 
+    ports:
+      - 5000:5000
+  fswebsample:
+    build: ./fsharp-kestrel-sample
+    image: serilog-fsharp-kestrel-sample 
+    ports:
+      - 5001:5001 
+  splunk:
+    build: ./splunk 
+    image: serilog-splunk
+    ports:
+      - 8000:8000
+      - 8088:8088
+    

@@ -1,0 +1,6 @@
+F:\STAFF\SKB\TestRest\bin\Debug\TestRest.exe.config
+F:\STAFF\SKB\TestRest\bin\Debug\TestRest.exe
+F:\STAFF\SKB\TestRest\bin\Debug\TestRest.pdb
+F:\STAFF\SKB\TestRest\obj\Debug\TestRest.csprojResolveAssemblyReference.cache
+F:\STAFF\SKB\TestRest\obj\Debug\TestRest.exe
+F:\STAFF\SKB\TestRest\obj\Debug\TestRest.pdb
