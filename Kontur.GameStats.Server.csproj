@@ -78,7 +78,7 @@
     <Compile Include="ServiceTests\GetMatchTests.cs" />
     <Compile Include="ServiceTests\GetPlayerReportTests.cs" />
     <Compile Include="ServiceTests\GetPlayerStatsTests.cs" />
-    <Compile Include="ServiceTests\GetPopularServersTest.cs" />
+    <Compile Include="ServiceTests\GetServerReportTests.cs" />
     <Compile Include="ServiceTests\GetServerStatsTest.cs" />
     <Compile Include="ServiceTests\GetServersTests.cs" />
     <Compile Include="ServiceTests\GetServerTest.cs" />

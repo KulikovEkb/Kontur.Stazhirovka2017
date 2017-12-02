@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Kontur.GameStats.Server.ServiceTests
 {
     [TestFixture]
-    class GetPopularServersTest
+    class GetServerReportTests
     {
         [SetUp]
         public void InsertData()
@@ -292,7 +292,7 @@ namespace Kontur.GameStats.Server.ServiceTests
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual("62.210.26.88-1337", result[0].Endpoint);
                 Assert.AreEqual(">> Sniper Heaven <<", result[0].Name);
-                //Assert.AreEqual();
+                Assert.AreEqual(1.5, result[0].AverageMatchesPerDay);
             }
         }
 
@@ -308,10 +308,10 @@ namespace Kontur.GameStats.Server.ServiceTests
                 Assert.AreEqual(2, result.Count);
                 Assert.AreEqual("62.210.26.88-1337", result[0].Endpoint);
                 Assert.AreEqual(">> Sniper Heaven <<", result[0].Name);
-                //Assert.AreEqual();
+                Assert.AreEqual(1.5, result[0].AverageMatchesPerDay);
                 Assert.AreEqual("167.42.23.32-1337", result[1].Endpoint);
                 Assert.AreEqual("] My P3rfect Server [", result[1].Name);
-                //Assert.AreEqual();
+                Assert.AreEqual( 0.555556,result[1].AverageMatchesPerDay);
             }
         }
     }
