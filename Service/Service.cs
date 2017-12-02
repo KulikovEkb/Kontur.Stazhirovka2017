@@ -11,6 +11,24 @@ namespace Kontur.GameStats.Server.Service
 {
     class Service : IService
     {
+        //internal int CheckCount(string count)
+        //{
+        //    int quantity = Convert.ToInt32(count);
+        //    if (quantity > 50)
+        //        return 50;
+        //    else
+        //        return quantity;
+        //}
+        internal int CheckCount(string count)
+        {
+            int quantity = Convert.ToInt32(count);
+            if (quantity > 50)
+                return 50;
+            else if (quantity <= 0)
+                throw new Exception("Count is less or equal zero");
+            else
+                return quantity;
+        }
 
         public void AddMatchInfo(Match match, string endpoint, string timestamp)
         {
@@ -44,11 +62,19 @@ namespace Kontur.GameStats.Server.Service
 
         public List<PlayerReport> GetBestPlayers(string count)
         {
-            int quantity = Convert.ToInt32(count);
-            if (quantity > 50)
-                quantity = 50;
-            else if (quantity <= 0)
-                return new List<PlayerReport>();
+            int quantity = 0;
+            try
+            {
+                quantity = CheckCount(count);
+            }
+            catch (Exception exc)
+            {
+                if (exc.Message == "Count is less or equal zero")
+                    return new List<PlayerReport>();
+            }
+            //int quantity = CheckCount(count);
+            //if (quantity <= 0)
+            //    return new List<PlayerReport>();
 
             using (var database = new LiteDatabase(Program.databasePath))
             {
@@ -82,11 +108,19 @@ namespace Kontur.GameStats.Server.Service
 
         public List<ServerReport> GetPopularServers(string count)
         {
-            int quantity = Convert.ToInt32(count);
-            if (quantity > 50)
-                quantity = 50;
-            else if (quantity <= 0)
-                return new List<ServerReport>();
+            int quantity = 0;
+            try
+            {
+                quantity = CheckCount(count);
+            }
+            catch (Exception exc)
+            {
+                if (exc.Message == "Count is less or equal zero")
+                    return new List<ServerReport>();
+            }
+            //int quantity = CheckCount(count);
+            //if (quantity <= 0)
+            //    return new List<ServerReport>();
 
             using (var database = new LiteDatabase(Program.databasePath))
             {
@@ -98,11 +132,19 @@ namespace Kontur.GameStats.Server.Service
 
         public List<MatchReport> GetRecentMatches(string count)
         {
-            int quantity = Convert.ToInt32(count);
-            if (quantity > 50)
-                quantity = 50;
-            else if (quantity <= 0)
-                return new List<MatchReport>();
+            int quantity = 0;
+            try
+            {
+                quantity = CheckCount(count);
+            }
+            catch (Exception exc)
+            {
+                if (exc.Message == "Count is less or equal zero")
+                    return new List<MatchReport>();
+            }
+            //int quantity = CheckCount(count);
+            //if (quantity <= 0)
+            //    return new List<MatchReport>();
             using (var database = new LiteDatabase(Program.databasePath))
             {
                 var matchesCollection = database.GetCollection<Match>("matches");
