@@ -69,10 +69,13 @@ namespace Kontur.GameStats.Server.Classes
                 .Select(x => x.Count())
                 .First();
 
-            playerStats.AverageMatchesPerDay = (float)playerMatches
-                .GroupBy(x => x.JustDateFromTimestamp)
-                .Select(x => x.Count())
-                .Average();
+            int daysOfPlayer = ((playerMatches.Min(x => x.DateTimeTimestamp)) - (matchesCollection.Max(x => x.DateTimeTimestamp))).Days;
+            playerStats.AverageMatchesPerDay = (float)playerStats.TotalMatchesPlayed / daysOfPlayer;
+
+            //playerStats.AverageMatchesPerDay = (float)playerMatches
+            //    .GroupBy(x => x.JustDateFromTimestamp)
+            //    .Select(x => x.Count())
+            //    .Average();
 
             playerStats.LastMatchPlayed = playerMatches
                 .OrderByDescending(x => x.DateTimeTimestamp)
