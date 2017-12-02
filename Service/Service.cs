@@ -70,6 +70,11 @@ namespace Kontur.GameStats.Server.Service
             {
                 if (exc.Message == "Count is less or equal zero")
                     return new List<PlayerReport>();
+                else
+                {
+                    Program.log.Error(exc, "An error occured for HTTP GET GetBestPlayers");
+                    throw exc;
+                }
             }
             try
             {
@@ -135,6 +140,11 @@ namespace Kontur.GameStats.Server.Service
             {
                 if (exc.Message == "Count is less or equal zero")
                     return new List<ServerReport>();
+                else
+                {
+                    Program.log.Error(exc, "An error occured for HTTP GET GetPopularServers");
+                    throw exc;
+                }
             }
 
             try
@@ -164,6 +174,11 @@ namespace Kontur.GameStats.Server.Service
             {
                 if (exc.Message == "Count is less or equal zero")
                     return new List<MatchReport>();
+                else
+                {
+                    Program.log.Error(exc, "An error occured for HTTP GET GetRecentMatches");
+                    throw exc;
+                }
             }
 
             try
