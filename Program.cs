@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Text;
@@ -11,7 +12,21 @@ namespace Kontur.GameStats.Server
 {
     class Options
     {
-        public string Prefix { get; set; }
+        string prefix;
+        public string Prefix
+        {
+            get
+            {
+                return prefix;
+            }
+            set
+            {
+                if (value.Substring(0, 9) == "http://+:" || value.Substring(0, 9) == "http://*:")
+                    prefix = "http://" + Dns.GetHostEntry("localhost").HostName + value.Substring(8);
+                else
+                    prefix = value;
+            }
+        }
     }
 
     class Program
@@ -23,7 +38,7 @@ namespace Kontur.GameStats.Server
             commandLineParser
                 .Setup(options => options.Prefix)
                 .As("prefix")
-                .SetDefault("http://localhost:8080/")
+                .SetDefault("http://+:8080/")
                 .WithDescription("HTTP prefix to listen on");
 
             commandLineParser
@@ -40,7 +55,7 @@ namespace Kontur.GameStats.Server
             try
             {
                 ServiceEndpoint serviceEndpoint = serviceHost.AddServiceEndpoint(typeof(Service.IService), new WebHttpBinding(), "");
-                serviceEndpoint.Behaviors.Add(new WebHttpBehavior());
+                serviceEndpoint.Behaviors.Add(new WebHttpBehavior { AutomaticFormatSelectionEnabled = true });
                 serviceHost.Open();
                 openSucceeded = true;
             }

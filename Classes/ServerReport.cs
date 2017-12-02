@@ -40,8 +40,7 @@ namespace Kontur.GameStats.Server.Classes
             }
 
             IEnumerable<ServerReport> orderedTempResult = tempResult.OrderByDescending(x => x.AverageMatchesPerDay).Take(quantity);
-            var result = new List<ServerReport>(orderedTempResult);
-            return result;
+            return new List<ServerReport>(orderedTempResult);
         }
     }
 }
