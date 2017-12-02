@@ -22,29 +22,23 @@ namespace Kontur.GameStats.Server.Service
                 {
                     match.Endpoint = endpoint;
                     match.StringTimestamp = timestamp;
-                    match.DateTimeTimestamp = Convert.ToDateTime(timestamp);
+                    match.DateTimeTimestamp = Convert.ToDateTime(timestamp).ToUniversalTime();
                     match.JustDateFromTimestamp = timestamp.Substring(0, 10);
-                    float players = match.Scoreboard.Count();
-                    foreach (Player item in match.Scoreboard)
-                    {
-                        item.NameInUpperCase = item.Name.ToUpper();
-                        if (players == 1)
-                        {
-                            item.ScoreboardPercent = 100;
-                        }
-                        else
-                        {
-                            item.ScoreboardPercent = (players - (Array.IndexOf(match.Scoreboard, item) + 1)) / (players - 1) * 100;
-                        }
-                    }
+                    int playersCount = match.Scoreboard.Count();
 
-                    matchesCollection.Insert(match);
+                    for (int i = 0; i < playersCount; i++)
+                    {
+                        match.Scoreboard[i].NameInUpperCase = match.Scoreboard[i].Name.ToUpper();
+                        if (playersCount == 1)
+                            match.Scoreboard[i].ScoreboardPercent = 100;
+                        else
+                            match.Scoreboard[i].ScoreboardPercent = (float)(playersCount - (i + 1)) / (playersCount - 1) * 100;
+                    }
                 }
                 else
-                {
                     throw new WebFaultException(System.Net.HttpStatusCode.BadRequest);
-                }
             }
+
         }
 
         public void AddServerInfo(Classes.Server server, string endpoint)

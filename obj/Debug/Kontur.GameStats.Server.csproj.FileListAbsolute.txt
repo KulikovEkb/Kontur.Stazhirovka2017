@@ -10,3 +10,14 @@ C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\bin\Debu
 C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\obj\Debug\Kontur.GameStats.Server.csprojResolveAssemblyReference.cache
 C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\obj\Debug\Kontur.GameStats.Server.exe
 C:\Users\Eburger\Downloads\SKB_stazhirovka\2017\Kontur.GameStats.Server\obj\Debug\Kontur.GameStats.Server.pdb
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\bin\Debug\Kontur.GameStats.Server.exe.config
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\obj\Debug\Kontur.GameStats.Server.exe
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\obj\Debug\Kontur.GameStats.Server.pdb
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\bin\Debug\Kontur.GameStats.Server.exe
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\bin\Debug\Kontur.GameStats.Server.pdb
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\bin\Debug\FluentCommandLineParser.dll
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\bin\Debug\LiteDB.dll
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\bin\Debug\FluentCommandLineParser.pdb
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\bin\Debug\FluentCommandLineParser.xml
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\bin\Debug\LiteDB.xml
+C:\Users\Kulikov\Downloads\SKB\2017\Kontur.GameStats.Server\obj\Debug\Kontur.GameStats.Server.csprojResolveAssemblyReference.cache

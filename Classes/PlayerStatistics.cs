@@ -82,10 +82,10 @@ namespace Kontur.GameStats.Server.Classes
                 .Select(x => x.StringTimestamp)
                 .First();
 
-            var totalKills = playerMatches
+            int totalKills = playerMatches
                 .SelectMany(x => x.Scoreboard.Where(y => y.NameInUpperCase == name).Select(z => z.Kills))
                 .Sum();
-            var totalDeaths = playerMatches
+            int totalDeaths = playerMatches
                 .SelectMany(x => x.Scoreboard.Where(y => y.NameInUpperCase == name).Select(z => z.Deaths))
                 .Sum();
             playerStats.KillToDeathRatio = (float)totalKills / totalDeaths;

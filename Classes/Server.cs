@@ -12,11 +12,11 @@ namespace Kontur.GameStats.Server.Classes
     {
         public int Id { get; set; }
 
-        [DataMember(Name = "name", Order = 1)]
+        [DataMember(Name = "name", Order = 1, IsRequired = true)]
         public string Name { get; set; }
-        [DataMember(Name = "gameModes", Order = 2)]
+        [DataMember(Name = "gameModes", Order = 2, IsRequired = true)]
         public string[] GameModes { get; set; }
-        
+
         public string Endpoint { get; set; }
     }
 }

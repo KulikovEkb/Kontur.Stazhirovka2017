@@ -38,8 +38,7 @@ namespace Kontur.GameStats.Server.Classes
 
             int daysOfServer = ((matches.Min(x => x.DateTimeTimestamp)) - (matchesCollection.Max(x => x.DateTimeTimestamp))).Days;
             result.AverageMatchesPerDay = (float)result.TotalMatchesPlayed / daysOfServer;
-
-
+            
             //result.AverageMatchesPerDay = (float)matches
             //    .GroupBy(x => x.JustDateFromTimestamp)
             //    .Average(x => x.Count());
