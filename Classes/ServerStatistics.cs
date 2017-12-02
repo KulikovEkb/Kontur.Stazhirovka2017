@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace Kontur.GameStats.Server.Classes
 {
@@ -24,5 +25,38 @@ namespace Kontur.GameStats.Server.Classes
         public List<string> Top5GameModes { get; set; }
         [DataMember(Name = "top5Maps", Order = 7)]
         public List<string> Top5Maps { get; set; }
+
+        public static ServerStatistics GetServerStats(LiteCollection<Match> matchesCollection, string endpoint)
+        {
+            var matches = matchesCollection.Find(x => x.Endpoint == endpoint);
+            var result = new ServerStatistics();
+            result.TotalMatchesPlayed = matches.Count();
+
+            result.MaximumMatchesPerDay = matches
+                .GroupBy(x => x.JustDateFromTimestamp)
+                .Max(x => x.Count());
+
+            result.AverageMatchesPerDay = (float)matches
+                .GroupBy(x => x.JustDateFromTimestamp)
+                .Average(x => x.Count());
+
+            result.MaximumPopulation = matches.Max(x => x.Scoreboard.Count());
+
+            result.AveragePopulation = (float)matches.Average(x => x.Scoreboard.Count());
+
+            result.Top5GameModes = new List<string>(matches
+                .GroupBy(x => x.GameMode)
+                .OrderByDescending(x => x.Count())
+                .Select(x => x.Key)
+                .Take(5));
+
+            result.Top5Maps = new List<string>(matches
+                .GroupBy(x => x.Map)
+                .OrderByDescending(x => x.Count())
+                .Select(x => x.Key)
+                .Take(5));
+
+            return result;
+        }
     }
 }

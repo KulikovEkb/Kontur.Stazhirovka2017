@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace Kontur.GameStats.Server.Classes
 {
@@ -16,5 +17,17 @@ namespace Kontur.GameStats.Server.Classes
         public string Timestamp { get; set; }
         [DataMember(Name = "results", Order = 3)]
         public Match Results { get; set; }
+
+        public static List<MatchReport> GetRecentMatches(LiteCollection<Match> matchesCollection, int quantity)
+        {
+            var recentMatches = matchesCollection.FindAll().OrderByDescending(x => x.DateTimeTimestamp).Take(quantity);
+            var result = new List<MatchReport>(quantity);
+            foreach (Match item in recentMatches)
+            {
+                result.Add(new MatchReport { Server = item.Endpoint, Timestamp = item.StringTimestamp, Results = item });
+            }
+
+            return result;
+        }
     }
 }

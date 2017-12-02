@@ -17,7 +17,6 @@ namespace Kontur.GameStats.Server.Service
             using (var database = new LiteDatabase(@"Storage.db"))
             {
                 var matchesCollection = database.GetCollection<Match>("matches");
-
                 var serversCollection = database.GetCollection<Classes.Server>("servers");
                 if (!(serversCollection.FindOne(x => x.Endpoint == endpoint) == null))
                 {
@@ -77,22 +76,7 @@ namespace Kontur.GameStats.Server.Service
             {
                 var matchesCollection = database.GetCollection<Match>("matches");
                 matchesCollection.EnsureIndex(x => x.Scoreboard.Select(y => y.Name));
-                var bestPlayers = matchesCollection.FindAll()
-                    .SelectMany(x => x.Scoreboard.Select(y => new { Name = y.Name, Kills = y.Kills, Deaths = y.Deaths }))
-                    .GroupBy(x => x.Name)
-                    .Select(x => new { Name = x.Key, KillsSum = x.Sum(y => y.Kills), DeathsSum = x.Sum(y => y.Deaths), PlayedMatches = x.Count() })
-                    .Where(x => x.DeathsSum > 0 && x.PlayedMatches >= 10)
-                    .Select(x => new { Name = x.Name, KillToDeathRatio = (float)x.KillsSum / x.DeathsSum })
-                    .OrderByDescending(x => x.KillToDeathRatio)
-                    .Take(quantity);
-
-
-                var result = new List<PlayerReport>();
-                foreach (var item in bestPlayers)
-                {
-                    result.Add(new PlayerReport { KillToDeathRatio = item.KillToDeathRatio, Name = item.Name });
-                }
-                return result;
+                return PlayerReport.GetBestPlayers(matchesCollection, quantity);
             }
         }
 
@@ -120,60 +104,7 @@ namespace Kontur.GameStats.Server.Service
             {
                 var matchesCollection = database.GetCollection<Match>("matches");
                 matchesCollection.EnsureIndex(x => x.Scoreboard.Select(y => y.NameInUpperCase));
-                var playerMatches = matchesCollection.FindAll()
-                    .Where(x => x.Scoreboard.Any(y => y.NameInUpperCase == name));
-                var result = new PlayerStatistics();
-                result.TotalMatchesPlayed = playerMatches.Count();
-
-                result.TotalMatchesWon = playerMatches
-                    .Where(x => x.Scoreboard[0].NameInUpperCase == name)
-                    .Count();
-
-                result.FavoriteServer = playerMatches
-                    .GroupBy(x => x.Endpoint)
-                    .OrderByDescending(x => x.Count())
-                    .Select(x => x.Key)
-                    .First();
-
-                result.UniqueServers = playerMatches
-                    .GroupBy(x => x.Endpoint)
-                    .Count();
-
-                result.FavoriteGameMode = playerMatches
-                    .GroupBy(x => x.GameMode)
-                    .OrderByDescending(x => x.Count())
-                    .Select(x => x.Key)
-                    .First();
-
-                result.AverageScoreboardPercent = playerMatches
-                    .SelectMany(x => x.Scoreboard.Where(y => y.NameInUpperCase == name).Select(z => z.ScoreboardPercent))
-                    .Average();
-
-                result.MaximumMatchesPerDay = playerMatches
-                    .GroupBy(x => x.JustDateFromTimestamp)
-                    .OrderByDescending(x => x.Count())
-                    .Select(x => x.Count())
-                    .First();
-
-                result.AverageMatchesPerDay = (float)playerMatches
-                    .GroupBy(x => x.JustDateFromTimestamp)
-                    .Select(x => x.Count())
-                    .Average();
-
-                result.LastMatchPlayed = playerMatches
-                    .OrderByDescending(x => x.DateTimeTimestamp)
-                    .Select(x => x.StringTimestamp)
-                    .First();
-
-                var totalKills = playerMatches
-                    .SelectMany(x => x.Scoreboard.Where(y => y.NameInUpperCase == name).Select(z => z.Kills))
-                    .Sum();
-                var totalDeaths = playerMatches
-                    .SelectMany(x => x.Scoreboard.Where(y => y.NameInUpperCase == name).Select(z => z.Deaths))
-                    .Sum();
-                result.KillToDeathRatio = (float)totalKills / totalDeaths;
-
-                return result;
+                return PlayerStatistics.GetPlayerStats(matchesCollection, name);
             }
         }
 
@@ -189,28 +120,7 @@ namespace Kontur.GameStats.Server.Service
             {
                 var matchesCollection = database.GetCollection<Match>("matches");
                 var serversCollection = database.GetCollection<Classes.Server>("servers");
-                var tempResult = new List<ServerReport>();
-
-                var serverEndpoints = matchesCollection.FindAll()
-                    .GroupBy(x => x.Endpoint)
-                    .Select(x => new { Endpoint = x.Key });
-
-                foreach (var item in serverEndpoints)
-                {
-                    tempResult.Add(new ServerReport
-                    {
-                        Endpoint = item.Endpoint,
-                        AverageMatchesPerDay = (float)matchesCollection.FindAll()
-                    .Where(x => x.Endpoint == item.Endpoint)
-                    .GroupBy(x => x.JustDateFromTimestamp)
-                    .Select(x => x.Count()).Average(),
-                        Name = serversCollection.FindOne(x => x.Endpoint == item.Endpoint).Name
-                    });
-                }
-
-                IEnumerable<ServerReport> orderedTempResult = tempResult.OrderByDescending(x => x.AverageMatchesPerDay).Take(quantity);
-                var result = new List<ServerReport>(orderedTempResult);
-                return result;
+                return ServerReport.GetPopularServers(matchesCollection, serversCollection, quantity);
             }
         }
 
@@ -225,14 +135,7 @@ namespace Kontur.GameStats.Server.Service
             {
                 var matchesCollection = database.GetCollection<Match>("matches");
                 matchesCollection.EnsureIndex(x => x.DateTimeTimestamp);
-                var recentMatches = matchesCollection.FindAll().OrderByDescending(x => x.DateTimeTimestamp).Take(quantity);
-                var result = new List<MatchReport>(quantity);
-                foreach (Match item in recentMatches)
-                {
-                    result.Add(new MatchReport { Server = item.Endpoint, Timestamp = item.StringTimestamp, Results = item });
-                }
-
-                return result;
+                return MatchReport.GetRecentMatches(matchesCollection, quantity);
             }
         }
 
@@ -270,35 +173,7 @@ namespace Kontur.GameStats.Server.Service
             {
                 var matchesCollection = database.GetCollection<Match>("matches");
                 matchesCollection.EnsureIndex(x => x.Endpoint);
-                var matches = matchesCollection.Find(x => x.Endpoint == endpoint);
-                var result = new ServerStatistics();
-                result.TotalMatchesPlayed = matches.Count();
-
-                result.MaximumMatchesPerDay = matches
-                    .GroupBy(x => x.JustDateFromTimestamp)
-                    .Max(x => x.Count());
-                
-                result.AverageMatchesPerDay = (float)matches
-                    .GroupBy(x => x.JustDateFromTimestamp)
-                    .Average(x => x.Count());
-
-                result.MaximumPopulation = matches.Max(x => x.Scoreboard.Count());
-
-                result.AveragePopulation = (float)matches.Average(x => x.Scoreboard.Count());
-
-                result.Top5GameModes = new List<string>(matches
-                    .GroupBy(x => x.GameMode)
-                    .OrderByDescending(x => x.Count())
-                    .Select(x => x.Key)
-                    .Take(5));
-
-                result.Top5Maps = new List<string>(matches
-                    .GroupBy(x => x.Map)
-                    .OrderByDescending(x => x.Count())
-                    .Select(x => x.Key)
-                    .Take(5));
-
-                return result;
+                return ServerStatistics.GetServerStats(matchesCollection, endpoint);
             }
         }
 
